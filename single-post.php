@@ -64,6 +64,7 @@
 
                     // pripremamo upit
                     $sql = "SELECT * FROM posts WHERE posts.id = {$_GET['post_id']}";
+
                     $statement = $connection->prepare($sql);
 
                     // izvrsavamo upit
@@ -76,7 +77,7 @@
                     // punimo promenjivu sa rezultatom upita
                     $singlePost = $statement->fetch();
 
-                    // koristite var_dump kada god treba da proverite sadrzaj neke promenjive
+                    
                         
             ?>
 
@@ -85,7 +86,91 @@
                        
                             <h1><?php echo $singlePost['title'] ?></h1>
                             <p class="blog-post-meta"><?php echo $singlePost['created_at']." by " .$singlePost['author']?><p>
-                            <p><?php echo $singlePost['body']?></p>
+                            <p><?php echo $singlePost['body']?></p> 
+                            <br>
+                            <br>
+                              
+                            <button type="button" class="btn-default" id="btn">Hide comments</button>
+
+
+
+                             
+                                
+
+                    
+
+
+                          <form action="create-com.php" form method="post"> 
+                          <label id="first"> Name:</label><br/>
+                          <input type="text" name="author"><br/>
+
+                          <label id="first">Comment:</label><br/>
+                          <input type="text" name="text"><br/>
+
+                         <button type="submit" name="save">Send</button>
+                          </form> 
+
+                    
+
+
+            <br>
+            <br>
+            <nav class="blog-pagination">
+                <a class="btn btn-outline-primary" href="#">Older</a>
+                <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+            </nav>
+            <div id="comments">
+
+               <h4>comments</h4>
+                             
+            
+                
+                             <?php
+
+                              
+                               // pripremamo upit
+                                $sql = "SELECT * FROM comments WHERE post_id = {$_GET['post_id']}";
+                                $statement = $connection->prepare($sql); // salje upit ka bazi i vraca rezultat
+
+                                // izvrsavamo upit
+                                $statement->execute();
+
+                                // zelimo da se rezultat vrati kao asocijativni niz.
+                                // ukoliko izostavimo ovu liniju, vratice nam se obican, numerisan niz
+                                $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+                                // punimo promenjivu sa rezultatom upita
+                                $comments = $statement->fetchAll(); // daj nam sve rezultate
+
+                                
+
+                              ?>
+
+
+               <?php
+                foreach ($comments as $comment) {
+                 ?>
+                            
+
+                            <ul>
+
+                            
+                            <li><hr>
+                                <p>posted by:<?php echo $comment['author']?> </p>
+                                <p> <?php echo $comment['text']?> </p> </hr>
+                                
+                            </li>
+                            </ul>
+
+                            
+                          
+
+                     <?php
+                             }
+                    ?>
+           
+
+
                             </div>
                      
 
@@ -96,11 +181,6 @@
                 }
             ?>
 
-            <nav class="blog-pagination">
-                <a class="btn btn-outline-primary" href="#">Older</a>
-                <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
-            </nav>
-
         </div><!-- /.blog-main -->
         <?php include('sidebar.php') ?>
 
@@ -108,8 +188,11 @@
 
 </main><!-- /.container -->
 
+<?php include('footer.php') ?>
 
-     <?php include('footer.php') ?>
+<script src="javascript.js" type="text/javascript"></script>
+
+
 
 </body>
 </html>
