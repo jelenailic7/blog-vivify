@@ -1,6 +1,6 @@
 
     var btn = document.getElementById("btn");
-    btn.onclick=function(com) {
+    btn.click=function() {
 
 
     var com = document.getElementById("comments");
@@ -20,3 +20,9 @@
     }
     
  };
+
+var el = document.getElementById('form');
+
+el.addEventListener('submit', function(){
+    return confirm('Are you sure you want to submit this form?');
+}, false);

@@ -7,7 +7,7 @@
     $dbname = "blog";
 
     try {
-        $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); //veze bazy i php 
+        $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password ); //veze bazy i php 
         // set the PDO error mode to exception
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
@@ -15,6 +15,7 @@
     {
         echo $e->getMessage();
     }
+
 ?>
 <!doctype html>
 <html lang="en">

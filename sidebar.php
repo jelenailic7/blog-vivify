@@ -1,3 +1,21 @@
+<?php
+   
+    $servername = "127.0.0.1";
+    $username = "root";
+    $password = "vivify";
+    $dbname = "blog";
+
+    try {
+        $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username,$password  ); //veze bazy i php 
+        // set the PDO error mode to exception
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+    catch(PDOException $e)
+    {
+        echo $e->getMessage();
+    }
+?>
+
 <aside class="col-sm-3 ml-sm-auto blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
                 <h4>Latest posts</h4>
@@ -26,7 +44,7 @@
             
 
 
-                    <?php
+            <?php
                 foreach ($posts as $post) {
             ?>
 

@@ -1,13 +1,12 @@
 <?php
-    // ako su mysql username/password i ime baze na vasim racunarima drugaciji
-    // obavezno ih ovde zamenite
+   
     $servername = "127.0.0.1";
     $username = "root";
     $password = "vivify";
     $dbname = "blog";
 
     try {
-        $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); //veze bazy i php 
+        $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password ); //veze bazy i php 
         // set the PDO error mode to exception
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
@@ -15,6 +14,8 @@
     {
         echo $e->getMessage();
     }
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -84,46 +85,33 @@
                     
             <div class="blog-post">
                        
-                            <h1><?php echo $singlePost['title'] ?></h1>
-                            <p class="blog-post-meta"><?php echo $singlePost['created_at']." by " .$singlePost['author']?><p>
-                            <p><?php echo $singlePost['body']?></p> 
-                            <br>
-                            <br>
-                              
-                            <button type="button" class="btn-default" id="btn">Hide comments</button>
-
-
-
+                        <h1><?php echo $singlePost['title'] ?></h1>
+                        <p class="blog-post-meta"><?php echo $singlePost['created_at']." by " .$singlePost['author']?><p>
+                        <p><?php echo $singlePost['body']?></p> 
+                              <form method="post" action="delete-post.php">
+                                <input type="submit" name="delete" value="Delete">
+                                <input type="hidden" class="confirm" name="post_id" value="<?php echo $_GET['post_id']?>">
+                            </form>
+                        <br>
+                 
+                          
+    
                              
-                                
+                   
 
-                    
-
+                          <button type="button" class="btn-default" id="btn">Hide comments</button> <br><br>
 
                           <form action="create-com.php" form method="post"> 
                           <label id="first"> Name:</label><br/>
-                          <input type="text" name="author"><br/>
+                          <input type="text" name="author"><br/>  
 
-                          <label id="first">Comment:</label><br/>
-                          <input type="text" name="text"><br/>
-
-                         <button type="submit" name="save">Send</button>
+                          <label id="text">Comment:</label><br/>
+                          <textarea name="text"  rows="5" cols="40"></textarea> <br>
+ 
+                          <input type="submit" value="Save">
+                          <input type="hidden" name="post_id" value="<?php echo $_GET['post_id']?>">                        
                           </form> 
-
-                    
-
-
-            <br>
-            <br>
-            <nav class="blog-pagination">
-                <a class="btn btn-outline-primary" href="#">Older</a>
-                <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
-            </nav>
-            <div id="comments">
-
-               <h4>comments</h4>
-                             
-            
+   
                 
                              <?php
 
@@ -140,39 +128,39 @@
                                 $statement->setFetchMode(PDO::FETCH_ASSOC);
 
                                 // punimo promenjivu sa rezultatom upita
-                                $comments = $statement->fetchAll(); // daj nam sve rezultate
-
-                                
-
+                                $comments = $statement->fetchAll(); // daj nam sve rezultat                              
                               ?>
-
-
-               <?php
-                foreach ($comments as $comment) {
-                 ?>
-                            
-
-                            <ul>
-
-                            
-                            <li><hr>
-                                <p>posted by:<?php echo $comment['author']?> </p>
-                                <p> <?php echo $comment['text']?> </p> </hr>
-                                
-                            </li>
-                            </ul>
-
-                            
                           
 
-                     <?php
-                             }
-                    ?>
+
+              
+                <br>
+                <div id="comments">
+
+                    <h4>comments</h4>
+               <?php
+                foreach ($comments as $comment) {
+                 ?>                           
+                            <ul> <hr>                        
+                            <li>
+                                <p>comment by: <?php echo $comment['author']?> </p>
+                                <p> <?php echo $comment['text']?><p>   
+                                <form method="post" id="form" action="delete-com.php">
+                                <input type="submit" value="Delete">
+                                <input type="hidden" name="id" value="<?php echo $comment['id']?>">
+                                <input type ="hidden" name="post_id" value="<?php echo $_GET['post_id']?>">
+                            </form>
+
+                            </li> 
+                            </ul> 
+
+                                                      
+
+                <?php
+                    }
+                ?>
            
-
-
-                            </div>
-                     
+                </div> <!-- /.div comments -->            
 
 
             <?php
@@ -180,6 +168,14 @@
                     echo('post_id nije prosledjen kroz $_GET');
                 }
             ?>
+
+             </div><!-- /.blog-post -->
+
+
+             <nav class="blog-pagination">
+                <a class="btn btn-outline-primary" href="#">Older</a>
+                <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+            </nav>
 
         </div><!-- /.blog-main -->
         <?php include('sidebar.php') ?>
